@@ -1,0 +1,18 @@
+#pragma kernel WaveAnimation
+
+float Time;
+RWStructuredBuffer<float4> PointBuffer;
+
+[numthreads(8, 8, 1)]
+void WaveAnimation(uint2 id : SV_DispatchThreadID)
+{
+    float2 p = (id - 31.5) / 32;
+
+    float l = length(p);
+    float h = sin(l * 7 - Time * 2) * 0.2;
+
+    float c = l * 0.3 + Time * 0.1;
+
+    uint index = id.x + id.y * 64;
+    PointBuffer[index] = float4(p.x, h, p.y, c);
+}
